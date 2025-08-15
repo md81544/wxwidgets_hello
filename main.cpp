@@ -41,12 +41,13 @@ public:
         // Inner sizer for controls
         wxBoxSizer* innerSizer = new wxBoxSizer(wxVERTICAL);
 
-        wxStaticText* label = new wxStaticText(panel, wxID_ANY, "Enter some text:");
+        wxStaticText* label = new wxStaticText(panel, wxID_ANY, "Enter value in thousandths:");
         innerSizer->Add(label, 0, wxALL, 5);
 
         textBox = new wxTextCtrl(panel, wxID_ANY);
         innerSizer->Add(textBox, 0, wxALL | wxEXPAND, 5);
         textBox->Bind(wxEVT_CHAR, &AppFrame::OnChar, this);
+        textBox->Bind(wxEVT_TEXT, &AppFrame::OnTextChanged, this);
 
         checkBox = new wxCheckBox(panel, wxID_ANY, "Check me!");
         innerSizer->Add(checkBox, 0, wxALL, 5);
@@ -65,7 +66,6 @@ public:
         Bind(wxEVT_MENU, &AppFrame::OnAbout, this, wxID_ABOUT);
         Bind(wxEVT_MENU, &AppFrame::OnOpen, this, wxID_OPEN);
         Bind(wxEVT_MENU, &AppFrame::OnPreferences, this, wxID_PREFERENCES);
-        btn->Bind(wxEVT_BUTTON, &AppFrame::OnButtonClicked, this);
     }
 
 private:
@@ -111,8 +111,20 @@ private:
 
     void OnChar(wxKeyEvent& event)
     {
-        SetStatusText((char)event.GetUnicodeKey());
-        event.Skip(); // Needed to actually insert text into the control
+        char c = static_cast<char>(event.GetUnicodeKey());
+        if (isnumber(c) || c == '.') {
+            event.Skip(); // Needed to actually insert text into the control
+        }
+    }
+
+    void OnTextChanged(wxCommandEvent& event)
+    {
+        std::string t = event.GetString().ToStdString();
+        try {
+            float val = std::stof(t) * 0.0254;
+            SetStatusText(std::format("{} mm", val));
+        } catch (...) {
+        }
     }
 };
 
