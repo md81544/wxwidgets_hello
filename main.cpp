@@ -6,9 +6,9 @@
 #include <wx/textctrl.h>
 #include <wx/wx.h>
 
-class MyFrame : public wxFrame {
+class AppFrame : public wxFrame {
 public:
-    MyFrame()
+    AppFrame()
         : wxFrame(nullptr, wxID_ANY, "wxWidgets Example", wxDefaultPosition, wxSize(400, 300))
     {
         // Disable resizing
@@ -46,7 +46,7 @@ public:
 
         textBox = new wxTextCtrl(panel, wxID_ANY);
         innerSizer->Add(textBox, 0, wxALL | wxEXPAND, 5);
-        textBox->Bind(wxEVT_CHAR, &MyFrame::OnChar, this);
+        textBox->Bind(wxEVT_CHAR, &AppFrame::OnChar, this);
 
         checkBox = new wxCheckBox(panel, wxID_ANY, "Check me!");
         innerSizer->Add(checkBox, 0, wxALL, 5);
@@ -61,11 +61,11 @@ public:
         panel->SetSizer(outerSizer);
 
         // ===== Event bindings =====
-        Bind(wxEVT_MENU, &MyFrame::OnQuit, this, wxID_EXIT);
-        Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
-        Bind(wxEVT_MENU, &MyFrame::OnOpen, this, wxID_OPEN);
-        Bind(wxEVT_MENU, &MyFrame::OnPreferences, this, wxID_PREFERENCES);
-        btn->Bind(wxEVT_BUTTON, &MyFrame::OnButtonClicked, this);
+        Bind(wxEVT_MENU, &AppFrame::OnQuit, this, wxID_EXIT);
+        Bind(wxEVT_MENU, &AppFrame::OnAbout, this, wxID_ABOUT);
+        Bind(wxEVT_MENU, &AppFrame::OnOpen, this, wxID_OPEN);
+        Bind(wxEVT_MENU, &AppFrame::OnPreferences, this, wxID_PREFERENCES);
+        btn->Bind(wxEVT_BUTTON, &AppFrame::OnButtonClicked, this);
     }
 
 private:
@@ -116,14 +116,14 @@ private:
     }
 };
 
-class MyApp : public wxApp {
+class App : public wxApp {
 public:
     bool OnInit() override
     {
-        MyFrame* frame = new MyFrame();
+        AppFrame* frame = new AppFrame();
         frame->Show(true);
         return true;
     }
 };
 
-wxIMPLEMENT_APP(MyApp);
+wxIMPLEMENT_APP(App);
